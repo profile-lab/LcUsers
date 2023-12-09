@@ -8,13 +8,13 @@ use CodeIgniter\HTTP\ResponseInterface;
 // 
 use Config\Services;
 
-class LcUsersAuth implements FilterInterface
+class AppGuestFilter implements FilterInterface
 {
 	public function before(RequestInterface $request, $arguments = null)
 	{
-		$users = Services::users();
-		if (!$users->user_id()) {
-			return redirect()->route('web_login');
+		$appuser = Services::appuser();
+		if ($appuser->user_id()) {
+			return redirect()->route('web_dashboard');
 		}
 	}
 

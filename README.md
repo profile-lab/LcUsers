@@ -26,50 +26,34 @@ Add LC5 psr4 namespace in App\Config\Autoload.php
 
 ## App Services
 
-Add LcUsers and Siteuser services in App\Config\Services.php
+Add appuser services in App\Config\Services.php
 
 
         //--------------------------------------------------------------------
-        public static function users($getShared = true)
+        public static function appuser($getShared = true)
         {
                 if ($getShared) {
-                        return static::getSharedInstance('users');
+                return static::getSharedInstance('appuser');
                 }
-                return new \Lc5\Web\Controllers\Users\UserTools();
-        }
-
-        //--------------------------------------------------------------------
-        public static function shopcart($getShared = true)
-        {
-                if ($getShared) {
-                        return static::getSharedInstance('shopcart');
-                }
-                return new \LcUsers\Web\Controllers\Cart();
+                return new \LcUsers\Web\Controllers\Appuser();
         }
 
 ## Base Controller 
 
 Add helpers requirements in App\Controllers\BaseController.php
 
-        protected $helpers = [... 'lcshop_frontend'];
+        protected $helpers = [... 'lcusers_frontend', 'lcusers_backend'];
 
-Add getShopSettings method in App\Controllers\BaseController.php
 
-       //--------------------------------------------------------------------
-        protected function getShopSettings($current_app_id)
-        {
-                if(!$current_app_id){
-                        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-                }
-                if (class_exists('\LcUsers\Data\Models\ShopSettingsModel')) {
-                        // 
-                        $shop_settings_model = new \LcUsers\Data\Models\ShopSettingsModel();
-                        if (!$shop_settings_entity = $shop_settings_model->asObject()->where('id_app', $current_app_id)->first()) {
-                                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-                        }
-                        // 
-                        return $shop_settings_entity;
-                }
-                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 
-        }
+### App Filter 
+
+Add app users filter alias in App\Config\Filters.php
+
+        public array $aliases = [
+           ...
+           'appUserFilter' => \LcUsers\Web\Filters\AppAuthUserFilter::class,
+           'appGuestFilter' => \LcUsers\Web\Filters\AppGuestFilter::class,
+
+
+        ]
