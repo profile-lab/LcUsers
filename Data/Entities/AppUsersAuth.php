@@ -20,8 +20,9 @@ class AppUsersAuth extends Entity
 		'token' => null, 
 		'expires' => null, 
 		'extra' => null, 
-		'force_reset' => null, 
+		'force_reset' => false, 
 		'last_used_at' => null, 
+		'activated_at' => null, 
 
 
 

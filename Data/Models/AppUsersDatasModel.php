@@ -97,7 +97,14 @@ class AppUsersDatasModel extends MasterModel
 	//------------------------------------------------------------
 	protected function beforeInsert(array $data)
 	{
-		$data = $this->setDataAppAndLang($data);
+		if (in_array('id_app', $this->allowedFields)) {
+			if(defined('__web_app_id__')){
+				$curr_app = constant('__web_app_id__');
+				if($curr_app){
+					$data['data']['id_app'] = $curr_app;
+				}
+			}
+		}
 		$data = $this->beforeSave($data);
 		return $data;
 	}
