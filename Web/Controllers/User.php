@@ -33,6 +33,11 @@ class User extends \Lc5\Web\Controllers\MasterWeb
 
 
     //--------------------------------------------------------------------
+    public function login()
+    {
+    }
+    
+    //--------------------------------------------------------------------
     public function personalDashboard()
     {
     }
