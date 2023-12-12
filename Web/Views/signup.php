@@ -3,7 +3,9 @@
 <article>
     <div class="row row-form row-form-signup">
         <div class="myIn">
-            <?= h2(appLabel('Registrati', $app->labels, true), 'login-signup-title') ?>
+            <div class="login-signup-header">
+                <?= h2(appLabel('Registrati', $app->labels, true), 'login-signup-title') ?>
+            </div>
             <div class="login-signup-module">
                 <div class="login-signup-form-cnt">
                     <form method="post" class="login-signup-form" action="#signupform" id="signupform">
@@ -18,7 +20,7 @@
                         <?php } ?>
                         */ ?>
                         <?= csrf_field() ?>
-                        
+
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="email">Email </label>

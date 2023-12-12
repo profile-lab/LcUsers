@@ -3,7 +3,9 @@
 <article>
     <div class="row row-form row-form-signup">
         <div class="myIn">
-            <?= h2(appLabel('Login', $app->labels, true), 'login-signup-title') ?>
+            <div class="login-signup-header">
+                <?= h2(appLabel('Login', $app->labels, true), 'login-signup-title') ?>
+            </div>
             <div class="login-signup-module">
                 <div class="login-signup-form-cnt">
                     <form method="post" class="login-signup-form" action="#loginform" id="loginform">
@@ -39,7 +41,7 @@
                 </div>
                 <div class="login-signup-altenative-cnt">
                     <?= h4(appLabel('Non sei ancora registrato?', $app->labels, true), 'login-signup-alternative-title') ?>
-                    <?= cta((route_to('web_signup').(($request->getGet('returnTo')) ? '?returnTo=' . urlencode($request->getGet('returnTo')) : '')), appLabel('Registrati adesso', $app->labels, true), 'login-signup-alternative-link') ?>
+                    <?= cta((route_to('web_signup') . (($request->getGet('returnTo')) ? '?returnTo=' . urlencode($request->getGet('returnTo')) : '')), appLabel('Registrati adesso', $app->labels, true), 'login-signup-alternative-link') ?>
                 </div>
             </div>
         </div>
