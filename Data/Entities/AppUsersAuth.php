@@ -9,8 +9,10 @@ class AppUsersAuth extends Entity
 	protected $attributes = [
 		'id' => null, 
 		'user_id' => null, 
-		'type' => null, 
-		'active' => null, 
+		'type' => 'email_password', 
+		'single_sign_on_account' => '', 
+		'single_sign_on_data' => '', 
+		'active' => 0, 
 		'id_app' => null, 
 		'username' => null, 
 		'secret' => null, 

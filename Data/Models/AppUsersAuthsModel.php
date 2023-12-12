@@ -21,6 +21,8 @@ class AppUsersAuthsModel extends MasterModel
 		'id', 
 		'user_id', 
 		'type', 
+		'single_sign_on_account', 
+		'single_sign_on_data', 
 		'active', 
 		'id_app', 
 		'username', 
