@@ -8,24 +8,17 @@
                 <div class="login-signup-form-cnt">
                     <form method="post" class="login-signup-form" action="#signupform" id="signupform">
                         <?= getServerMessage() ?>
+                        <?php /*
                         <?php if (isset($form_result) && isset($form_result->user_mess)) { ?>
-                            <div class="form-mess form-mess-<?= $form_result->user_mess->type ?>">
-                                <?= h5($form_result->user_mess->title) ?>
-                                <?= h6(isset($form_result->user_mess->subtitle) ? $form_result->user_mess->subtitle : null) ?>
-                                <div class="form-mess-content"><?= $form_result->user_mess->content ?></div>
-                            </div>
-                        <?php } ?>
-                        <?= csrf_field() ?>
-                        <div class="form-row">
-                            <div class="form-field">
-                                <label for="name">Nome</label>
-                                <input type="text" name="name" id="name" value="<?= getReq('name') ?>" />
-                            </div>
-                            <div class="form-field">
-                                <label for="surname">Cognome</label>
-                                <input type="text" name="surname" id="surname" value="<?= getReq('surname') ?>" />
-                            </div>
+                        <div class="form-mess form-mess-<?= $form_result->user_mess->type ?>">
+                            <?= h5($form_result->user_mess->title) ?>
+                            <?= h6(isset($form_result->user_mess->subtitle) ? $form_result->user_mess->subtitle : null) ?>
+                            <div class="form-mess-content"><?= $form_result->user_mess->content ?></div>
                         </div>
+                        <?php } ?>
+                        */ ?>
+                        <?= csrf_field() ?>
+                        
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="email">Email </label>
