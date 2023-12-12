@@ -22,8 +22,10 @@ class User extends \Lc5\Web\Controllers\MasterWeb
 
         // dd('User.php');
         // 
-       
+        $this->web_ui_date->__set('request',$this->req);
+
         $this->appuser = Services::appuser();
+
         // 
 
         // 
@@ -35,6 +37,31 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     //--------------------------------------------------------------------
     public function login()
     {
+
+        //
+		if (appIsFile($this->base_view_filesystem . 'users/login.php')) {
+			$this->web_ui_date->__set('master_view', 'user-login');
+			return view($this->base_view_namespace . 'users/login', $this->web_ui_date->toArray());
+		}else{
+			$this->web_ui_date->__set('master_view', 'user-login-default');
+			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+			return view($this->LcUsers_views_namespace.'login', $this->web_ui_date->toArray());
+		}
+    }
+    //--------------------------------------------------------------------
+    public function signUp()
+    {
+        
+
+        //
+		if (appIsFile($this->base_view_filesystem . 'users/signup.php')) {
+			$this->web_ui_date->__set('master_view', 'user-signup');
+			return view($this->base_view_namespace . 'users/signup', $this->web_ui_date->toArray());
+		}else{
+			$this->web_ui_date->__set('master_view', 'user-signup-default');
+			$this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+			return view($this->LcUsers_views_namespace.'signup', $this->web_ui_date->toArray());
+		}
     }
     
     //--------------------------------------------------------------------
