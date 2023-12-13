@@ -37,7 +37,41 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     //--------------------------------------------------------------------
     public function login()
     {
+        // 
+        $validate_rules = [
+            'email' => ['label' => 'Email', 'rules' => 'required'],
+            'password' => ['label' => 'Password', 'rules' => 'required'],
+        ];
+        // 
+        if (defined('LOGIN_VALIDATION_RULES')) {
+            $validate_rules = constant('LOGIN_VALIDATION_RULES');
+        }
+        // 
+        if ($this->request->getPost()) {
+            if ($this->validate($validate_rules)) {
+                $logged_user_data =  $this->appuser->login($this->request->getPost());
+                if ($logged_user_data && $logged_user_data->code == 200 && $logged_user_data->data) {
+                    $this->appuser->setUserSession($logged_user_data->data);
+                    session()->setFlashdata('ui_mess', NULL);
+                    session()->setFlashdata('ui_mess_type', NULL);
+                    
+                    return redirect()->route('web_dashboard');
+                    
+                    // if ($get_redirect = $this->request->getGet('returnTo', false)) {
+                    //     return redirect()->to(urldecode($get_redirect));
+                    // } else {
+                    // }
 
+                    // 
+                } else {
+                    session()->setFlashdata('ui_mess', 'Nome utente o password errati');
+                    session()->setFlashdata('ui_mess_type', 'alert alert-danger');
+                }
+            } else {
+                session()->setFlashdata('ui_mess', 'Nome utente o password errati');
+                session()->setFlashdata('ui_mess_type', 'alert alert-danger');
+            }
+        }
         //
         if (appIsFile($this->base_view_filesystem . 'users/login.php')) {
             $this->web_ui_date->__set('master_view', 'user-login');
@@ -51,12 +85,6 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     //--------------------------------------------------------------------
     public function signUp()
     {
-        // d(APPPATH . 'Views/email/attiva_account.html');
-        // d($this->base_view_filesystem . 'email/attiva_account.html');
-        // if (is_file(APPPATH . '../LcUsers/Web/Views/email/attiva_account.html')) {
-        //     d('si');
-        // }
-        // dd(APPPATH . '../LcUsers/Web/Views/email/attiva_account.html');
         $curr_entity = new stdClass();
         helper('text');
         // 
@@ -132,10 +160,11 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     }
 
     //--------------------------------------------------------------------
-    public function attivaAccount( string $tokenString)
+    public function attivaAccount(string $tokenString)
     {
         $activationTokenData = $this->appuser->getActivationTokenData($tokenString);
-        if ($activationTokenData->data) {
+        
+        if ($activationTokenData && $activationTokenData->data) {
             $this->appuser->activateAccount($activationTokenData->data);
             session()->setFlashdata('ui_mess', 'Account attivato con successo');
             session()->setFlashdata('ui_mess_type', 'alert alert-success');
