@@ -19,7 +19,7 @@ class AppUsersDatasModel extends MasterModel
 	protected $returnType           = 'LcUsers\Data\Entities\AppUsersData';
 	protected $allowedFields        = [
 		'id', 
-		'username', 
+		'nickname', 
 		'status', 
 		'status_message', 
 		'id_app', 

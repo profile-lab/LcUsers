@@ -8,7 +8,7 @@ class AppUsersData extends Entity
 {
 	protected $attributes = [
 		'id' => null, 
-		'username' => null, 
+		'nickname' => null, 
 		'status' => 0, 
 		'status_message' => 'non_attivo', 
 		'id_app' => null, 
