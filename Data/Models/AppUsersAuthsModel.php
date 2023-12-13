@@ -18,20 +18,20 @@ class AppUsersAuthsModel extends MasterModel
 
 	protected $returnType           = 'LcUsers\Data\Entities\AppUsersAuth';
 	protected $allowedFields        = [
-		'id', 
-		'user_id', 
-		'type', 
-		'single_sign_on_account', 
-		'single_sign_on_data', 
-		'active', 
-		'id_app', 
-		'username', 
-		'secret', 
-		'activation_token', 
-		'token', 
-		'expires', 
-		'extra', 
-		'force_reset', 
+		'id',
+		'user_id',
+		'type',
+		'single_sign_on_account',
+		'single_sign_on_data',
+		'active',
+		'id_app',
+		'username',
+		'secret',
+		'activation_token',
+		'token',
+		'expires',
+		'extra',
+		'force_reset',
 		'last_used_at',
 		'activated_at',
 
@@ -90,9 +90,9 @@ class AppUsersAuthsModel extends MasterModel
 	protected function beforeInsert(array $data)
 	{
 		if (in_array('id_app', $this->allowedFields)) {
-			if(defined('__web_app_id__')){
+			if (defined('__web_app_id__')) {
 				$curr_app = constant('__web_app_id__');
-				if($curr_app){
+				if ($curr_app) {
 					$data['data']['id_app'] = $curr_app;
 				}
 			}
@@ -104,11 +104,9 @@ class AppUsersAuthsModel extends MasterModel
 	//------------------------------------------------------------
 	private function beforeSave(array $data)
 	{
-		
+		if (isset($data['data']['secret'])) {
+			$data['data']['secret'] = password_hash($data['data']['secret'], PASSWORD_DEFAULT);
+		}
 		return $data;
 	}
-
-
-
-	
 }

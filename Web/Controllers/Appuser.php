@@ -96,7 +96,7 @@ class Appuser extends \App\Controllers\BaseController
    {
       $generatedToken = random_string('alnum', 12) . '-' . random_string('alnum', 24) . '-' . random_string('alnum', 12) . '-' . random_string('alnum', 6);
       $post_data['username'] = $post_data['email'];
-      $post_data['password'] = $post_data['new_password'];
+      $post_data['secret'] = $post_data['new_password'];
       $post_data['activation_token'] = $generatedToken;
 
 
