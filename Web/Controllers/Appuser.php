@@ -185,6 +185,18 @@ class Appuser extends \App\Controllers\BaseController
    }
 
    //--------------------------------------------------------------------
+   public function getUserData()
+   {
+      $app_user_data = session()->get('app_user_data');
+      if ($app_user_data && $app_user_data->id) {
+         if (intval($app_user_data->id) > 0) {
+            return $app_user_data;
+         }
+      }
+      return null;
+   }
+
+   //--------------------------------------------------------------------
    public function getLoggedIn(): bool
    {
       return $this->loggedIn;
@@ -229,6 +241,14 @@ class Appuser extends \App\Controllers\BaseController
       return null;
    }
 
+   //--------------------------------------------------------------------
+   public function getUserWelcome()
+   {
+      if ($userFullName = $this->getUserFullName()) {
+         return "Benvenuto" . ' ' . $userFullName;
+      }
+      return null;
+   }
 
    //--------------------------------------------------------------------
    public function getUserFirstName()
@@ -240,7 +260,6 @@ class Appuser extends \App\Controllers\BaseController
       }
       return null;
    }
-
    //--------------------------------------------------------------------
    public function getUserLastName()
    {
@@ -407,18 +426,6 @@ class Appuser extends \App\Controllers\BaseController
    }
 
    //--------------------------------------------------------------------
-   public function getUserData()
-   {
-      $app_user_data = session()->get('app_user_data');
-      if ($app_user_data && $app_user_data->id) {
-         if (intval($app_user_data->id) > 0) {
-            return $app_user_data;
-         }
-      }
-      return null;
-   }
-
-   //--------------------------------------------------------------------
    public function getUserDataByKey($key)
    {
       if ($key && trim($key) && $__userdata = $this->getUserData()) {
@@ -428,37 +435,6 @@ class Appuser extends \App\Controllers\BaseController
       }
       return null;
    }
-
-   // //--------------------------------------------------------------------
-   // public function getUserDataByKeys($keys)
-   // {
-   //    return null;
-   // }
-
-   // //--------------------------------------------------------------------
-   // public function getUserDataByKeysArray($keys)
-   // {
-   //    return null;
-   // }
-
-   //--------------------------------------------------------------------
-   public function check(array $credentials)
-   {
-      return null;
-   }
-
-   //--------------------------------------------------------------------
-   // public function checkCartAction() //($category_guid = null)
-   // {
-   //     if ($this->req->getPost()) {
-   //         if ($this->req->getPost('cart_action') == 'ADD') {
-   //             if ($this->addToCart($this->req->getPost('prod_id'), 'p_')) {
-   //                 return TRUE;
-   //             }
-   //         }
-   //     }
-   //     return FALSE;
-   // }
 
 
    //--------------------------------------------------------------------

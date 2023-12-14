@@ -6,7 +6,7 @@ use Lc5\Data\Models\PagesModel;
 
 
 use Config\Services;
-
+use LcUsers\Data\Models\AppUsersDatasModel;
 use stdClass;
 
 class User extends \Lc5\Web\Controllers\MasterWeb
@@ -19,18 +19,19 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     public function __construct()
     {
         parent::__construct();
-
-        // dd('User.php');
         // 
         $this->web_ui_date->__set('request', $this->req);
-
         $this->appuser = Services::appuser();
-
+        $this->web_ui_date->__set('user_welcome', $this->appuser->getUserWelcome());
         // 
+    }
 
-        // 
 
-
+    //--------------------------------------------------------------------
+    public function logout()
+    {
+        $this->appuser->logout();
+		return redirect()->route('web_login');
     }
 
 
@@ -54,9 +55,9 @@ class User extends \Lc5\Web\Controllers\MasterWeb
                     $this->appuser->setUserSession($logged_user_data->data);
                     session()->setFlashdata('ui_mess', NULL);
                     session()->setFlashdata('ui_mess_type', NULL);
-                    
+
                     return redirect()->route('web_dashboard');
-                    
+
                     // if ($get_redirect = $this->request->getGet('returnTo', false)) {
                     //     return redirect()->to(urldecode($get_redirect));
                     // } else {
@@ -163,7 +164,7 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     public function attivaAccount(string $tokenString)
     {
         $activationTokenData = $this->appuser->getActivationTokenData($tokenString);
-        
+
         if ($activationTokenData && $activationTokenData->data) {
             $this->appuser->activateAccount($activationTokenData->data);
             session()->setFlashdata('ui_mess', 'Account attivato con successo');
@@ -179,12 +180,31 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     //--------------------------------------------------------------------
     public function personalDashboard()
     {
+
+        $user_data_model = new AppUsersDatasModel();
+        $user_data = $user_data_model->find($this->appuser->getUserId());
+        if (!$user_data) {
+            return redirect()->route('web_login');
+        }
+        $this->web_ui_date->__set('user_data', $user_data);
+
+        //
+        if (appIsFile($this->base_view_filesystem . 'users/dashboard.php')) {
+            $this->web_ui_date->__set('master_view', 'user-dashboard');
+            return view($this->base_view_namespace . 'users/dashboard', $this->web_ui_date->toArray());
+        } else {
+            $this->web_ui_date->__set('master_view', 'user-dashboard-default');
+            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+            return view($this->LcUsers_views_namespace . 'dashboard', $this->web_ui_date->toArray());
+        }
     }
 
 
     //--------------------------------------------------------------------
     public function index()
     {
+
+
 
         // if ($this->cart->checkCartAction()) {
         //     return redirect()->to(site_url(uri_string()));
