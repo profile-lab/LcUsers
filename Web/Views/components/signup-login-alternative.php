@@ -1,0 +1,2 @@
+<?= h4(appLabel('Non sei ancora registrato?', $app->labels, true), 'login-signup-alternative-title') ?>
+                    <?= cta((route_to('web_signup') . (($request->getGet('returnTo')) ? '?returnTo=' . urlencode($request->getGet('returnTo')) : '')), appLabel('Registrati adesso', $app->labels, true), 'login-signup-alternative-link') ?>
