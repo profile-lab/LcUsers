@@ -32,6 +32,10 @@ class AppUsersData extends Entity
 		'auth_5' => null, 
 		'last_active' => null, 
 
+		'country' => 'IT',
+		'district' => null,
+		'street_number' => null,
+
 
 
 

@@ -43,6 +43,10 @@ class AppUsersDatasModel extends MasterModel
 		'auth_5', 
 		'last_active', 
 
+		'country',
+		'district',
+		'street_number',
+
 	];
 
 	protected $beforeInsert         = ['beforeInsert'];
