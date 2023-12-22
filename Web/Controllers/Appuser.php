@@ -96,6 +96,41 @@ class Appuser extends \App\Controllers\BaseController
    }
 
    //--------------------------------------------------------------------
+   public function loginPostAction($post_data): bool
+   {
+      //  // 
+      //  $validate_rules = [
+      //      'email' => ['label' => 'Email', 'rules' => 'required'],
+      //      'password' => ['label' => 'Password', 'rules' => 'required'],
+      //  ];
+      //  // 
+      //  if (defined('LOGIN_VALIDATION_RULES')) {
+      //      $validate_rules = constant('LOGIN_VALIDATION_RULES');
+      //  }
+      //  // 
+      //  if ($this->validate($validate_rules)) {
+      $logged_user_data =  $this->login($post_data);
+      if ($logged_user_data && $logged_user_data->code == 200 && $logged_user_data->data) {
+         $this->setUserSession($logged_user_data->data);
+         // session()->setFlashdata('ui_mess', NULL);
+         // session()->setFlashdata('ui_mess_type', NULL);
+
+         return TRUE;
+         // return redirect()->route('web_dashboard');
+
+         // if ($get_redirect = $this->request->getGet('returnTo', false)) {
+         //     return redirect()->to(urldecode($get_redirect));
+         // } else {
+         // }
+
+         // 
+
+      }
+      //  }
+      return FALSE;
+   }
+
+   //--------------------------------------------------------------------
    public function getActivationTokenData(string $tokenString)
    {
       $userAuthData = $this->appuser_auth_model->asObject()
@@ -136,6 +171,25 @@ class Appuser extends \App\Controllers\BaseController
          }
       }
 
+      return false;
+   }
+
+   //--------------------------------------------------------------------
+   public function updateUserData(array $post_data)
+   {
+      $user_id = $this->user_id();
+      if ($user_id) {
+         $userData = $this->appuser_data_model->find($user_id);
+         $userData->fill($post_data);
+         if ($this->appuser_data_model->save($userData)) {
+            $new_user_data = (object)[
+               'code' => 200,
+               'status' => 'success',
+               'data' => $userData
+            ];
+            return $new_user_data;
+         }
+      }
       return false;
    }
 
@@ -182,6 +236,19 @@ class Appuser extends \App\Controllers\BaseController
    public function setUserSession(object $userData)
    {
       session()->set(['app_user_data' => $userData]);
+   }
+
+   //--------------------------------------------------------------------
+   public function getAllUserData()
+   {
+      if ($curr_user_id = $this->getUserId()) {
+
+         $allUserData = $this->appuser_data_model->asObject()->where('status!=', 0)->find($curr_user_id);
+         if ($allUserData) {
+            return $allUserData;
+         }
+      }
+      return false;
    }
 
    //--------------------------------------------------------------------

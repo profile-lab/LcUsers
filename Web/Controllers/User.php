@@ -31,43 +31,22 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     public function logout()
     {
         $this->appuser->logout();
-		return redirect()->route('web_login');
+        return redirect()->route('web_login');
     }
 
 
     //--------------------------------------------------------------------
     public function login()
     {
-        // 
-        $validate_rules = [
-            'email' => ['label' => 'Email', 'rules' => 'required'],
-            'password' => ['label' => 'Password', 'rules' => 'required'],
-        ];
-        // 
-        if (defined('LOGIN_VALIDATION_RULES')) {
-            $validate_rules = constant('LOGIN_VALIDATION_RULES');
-        }
-        // 
         if ($this->request->getPost()) {
-            if ($this->validate($validate_rules)) {
-                $logged_user_data =  $this->appuser->login($this->request->getPost());
-                if ($logged_user_data && $logged_user_data->code == 200 && $logged_user_data->data) {
-                    $this->appuser->setUserSession($logged_user_data->data);
-                    session()->setFlashdata('ui_mess', NULL);
-                    session()->setFlashdata('ui_mess_type', NULL);
-
-                    return redirect()->route('web_dashboard');
-
-                    // if ($get_redirect = $this->request->getGet('returnTo', false)) {
-                    //     return redirect()->to(urldecode($get_redirect));
-                    // } else {
-                    // }
-
-                    // 
-                } else {
-                    session()->setFlashdata('ui_mess', 'Nome utente o password errati');
-                    session()->setFlashdata('ui_mess_type', 'alert alert-danger');
-                }
+            $post_data = $this->request->getPost();
+            if ($this->appuser->loginPostAction($post_data)) {
+                // if ($get_redirect = $this->request->getGet('returnTo', false)) {
+                //     return redirect()->to(urldecode($get_redirect));
+                // } else {
+                //     return redirect()->route('web_dashboard');
+                // }
+                return redirect()->route('web_dashboard');
             } else {
                 session()->setFlashdata('ui_mess', 'Nome utente o password errati');
                 session()->setFlashdata('ui_mess_type', 'alert alert-danger');
@@ -83,6 +62,47 @@ class User extends \Lc5\Web\Controllers\MasterWeb
             return view($this->LcUsers_views_namespace . 'login', $this->web_ui_date->toArray());
         }
     }
+
+    // //--------------------------------------------------------------------
+    // protected function loginPostAction():bool
+    // {
+    //     // 
+    //     $validate_rules = [
+    //         'email' => ['label' => 'Email', 'rules' => 'required'],
+    //         'password' => ['label' => 'Password', 'rules' => 'required'],
+    //     ];
+    //     // 
+    //     if (defined('LOGIN_VALIDATION_RULES')) {
+    //         $validate_rules = constant('LOGIN_VALIDATION_RULES');
+    //     }
+    //     // 
+    //     if ($this->validate($validate_rules)) {
+    //         $logged_user_data =  $this->appuser->login($this->request->getPost());
+    //         if ($logged_user_data && $logged_user_data->code == 200 && $logged_user_data->data) {
+    //             $this->appuser->setUserSession($logged_user_data->data);
+    //             session()->setFlashdata('ui_mess', NULL);
+    //             session()->setFlashdata('ui_mess_type', NULL);
+
+    //             return TRUE;
+    //             // return redirect()->route('web_dashboard');
+
+    //             // if ($get_redirect = $this->request->getGet('returnTo', false)) {
+    //             //     return redirect()->to(urldecode($get_redirect));
+    //             // } else {
+    //             // }
+
+    //             // 
+    //         } else {
+    //             session()->setFlashdata('ui_mess', 'Nome utente o password errati');
+    //             session()->setFlashdata('ui_mess_type', 'alert alert-danger');
+    //         }
+    //     } else {
+    //         session()->setFlashdata('ui_mess', 'Nome utente o password errati');
+    //         session()->setFlashdata('ui_mess_type', 'alert alert-danger');
+    //     }
+    //     return FALSE;
+    // }
+
     //--------------------------------------------------------------------
     public function signUp()
     {
@@ -196,6 +216,52 @@ class User extends \Lc5\Web\Controllers\MasterWeb
             $this->web_ui_date->__set('master_view', 'user-dashboard-default');
             $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
             return view($this->LcUsers_views_namespace . 'dashboard', $this->web_ui_date->toArray());
+        }
+    }
+
+    //--------------------------------------------------------------------
+    public function userProfile()
+    {
+
+        $user_data_model = new AppUsersDatasModel();
+        $user_data = $user_data_model->find($this->appuser->getUserId());
+        if (!$user_data) {
+            return redirect()->route('web_login');
+        }
+
+        // 
+        $validate_rules = [
+            'name' => ['label' => 'Nome', 'rules' => 'required'],
+            'surname' => ['label' => 'Cognome', 'rules' => 'required'],
+        ];
+        // 
+        if (defined('PROFILE_EDIT_VALIDATION_RULES')) {
+            $validate_rules = constant('PROFILE_EDIT_VALIDATION_RULES');
+        }
+        // 
+        if ($this->request->getPost('action') == 'save_account_data') {
+            if ($this->validate($validate_rules)) {
+                $this->appuser->updateUserData($this->request->getPost());
+            } else {
+                session()->setFlashdata('ui_mess', $this->validator->getErrors());
+                session()->setFlashdata('ui_mess_type', 'alert alert-danger');
+            }
+        }
+
+
+        
+
+        // 
+        $this->web_ui_date->__set('user_data', $user_data);
+
+        //
+        if (appIsFile($this->base_view_filesystem . 'users/profile-edit.php')) {
+            $this->web_ui_date->__set('master_view', 'user-profile-edit');
+            return view($this->base_view_namespace . 'users/profile-edit', $this->web_ui_date->toArray());
+        } else {
+            $this->web_ui_date->__set('master_view', 'user-profile-edit-default');
+            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+            return view($this->LcUsers_views_namespace . 'profile-edit', $this->web_ui_date->toArray());
         }
     }
 

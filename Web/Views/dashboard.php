@@ -15,6 +15,14 @@
                 </div>
                 <div class="row-user-sidebar">
                     <h5>Area Utente</h5>
+
+                    
+
+                    <ul class="user-dashboard-menu">
+                        <li><a href="<?= route_to('web_user_profile') ?>">Profilo</a></li>
+                        <li><a href="<?= route_to('web_dashboard') ?>">Dashboard</a></li>
+                        <li><a href="<?= route_to('web_logout') ?>">Logout</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

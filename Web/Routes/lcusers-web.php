@@ -30,14 +30,15 @@ $routes->match(['get'], 'attiva-account/(:any)', '\LcUsers\Web\Controllers\User:
 $routes->group('user', ['namespace' => '\LcUsers\Web\Controllers', 'filter' => 'appUserFilter'], function ($routes) {
     $routes->match(['get'], 'logout', 'User::logout', ['as' => 'web_logout']);
 
-    $routes->group('user-settings', function ($routes) {
-        // $routes->match(['get','post'], 'membership', 'UserSettings::membershipList', ['as' => 'web_user_settings_membership']);
-        // $routes->match(['get', 'post'], 'profiles/(:num)', 'UserSettings::profilesEdit/$1', ['as' => 'web_user_settings_profile_edit']);
-        // $routes->match(['get','post'], 'profiles/delete/(:num)', 'UserSettings::profilesDelete/$1', ['as' => 'web_user_settings_profile_delete']);
-        // $routes->match(['get','post'], 'profiles', 'UserSettings::profilesList', ['as' => 'web_user_settings_profiles']);
-        $routes->match(['get', 'post'], '/', 'UserSettings::userAccount', ['as' => 'web_user_settings_account']);
-    });
+    // $routes->group('user-settings', function ($routes) {
+    //     // $routes->match(['get','post'], 'membership', 'UserSettings::membershipList', ['as' => 'web_user_settings_membership']);
+    //     // $routes->match(['get', 'post'], 'profiles/(:num)', 'UserSettings::profilesEdit/$1', ['as' => 'web_user_settings_profile_edit']);
+    //     // $routes->match(['get','post'], 'profiles/delete/(:num)', 'UserSettings::profilesDelete/$1', ['as' => 'web_user_settings_profile_delete']);
+    //     // $routes->match(['get','post'], 'profiles', 'UserSettings::profilesList', ['as' => 'web_user_settings_profiles']);
+    //     $routes->match(['get', 'post'], '/', 'UserSettings::userAccount', ['as' => 'web_user_settings_account']);
+    // });
     // 
+    $routes->match(['get','post'], 'profile', 'User::userProfile', ['as' => 'web_user_profile']);
     $routes->match(['get','post'], 'dashboard', 'User::personalDashboard', ['as' => 'web_dashboard']);
     $routes->match(['get','post'], '/', 'User::personalDashboard', ['as' => 'web_user_area']);
 });
