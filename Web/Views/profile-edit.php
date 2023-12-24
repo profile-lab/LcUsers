@@ -1,13 +1,13 @@
 <?= $this->extend($base_view_folder . 'layout/body') ?>
 <?= $this->section('content') ?>
 <article>
-    <div class="row row-form row-form-signup">
+    <div class="row row-user row-user">
         <div class="myIn">
-            <div class="user-dashboard-header">
-                <?= h2(appLabel('Dashboard', $app->labels, true), 'user-dashboard-title') ?>
-            </div>
-            <div class="user-dashboard-module">
-                <div class="user-dashboard-form-cnt">
+            <header class="user-header">
+                <?= h1(appLabel('Il tuo profilo', $app->labels, true), 'user-title') ?>
+            </header>
+            <div class="user-module">
+                <div class="user-module-main">
                     <form method="post">
                         <?= getServerMessage() ?>
                         <?= csrf_field() ?>
@@ -32,21 +32,21 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-field">
+                            <div class="form-field form-field-2-3">
                                 <label>Località</label>
                                 <input type="text" name="city" value="<?= getReq('city') ?: $user_data->city ?>" />
                             </div>
-                            <div class="form-field">
+                            <div class="form-field form-field-1-3">
                                 <label>Cap</label>
                                 <input type="text" name="cap" value="<?= getReq('cap') ?: $user_data->cap ?>" />
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-field">
+                            <div class="form-field form-field-3-4">
                                 <label>Via/Piazza</label>
                                 <input type="text" name="address" value="<?= getReq('address') ?: $user_data->address ?>" />
                             </div>
-                            <div class="form-field">
+                            <div class="form-field form-field-1-4">
                                 <label>Civico</label>
                                 <input type="text" name="street_number" value="<?= getReq('street_number') ?: $user_data->street_number ?>" />
                             </div>
@@ -61,6 +61,9 @@
 
 
                 </div>
+                <aside class="sidebar user_sidebar ">
+                    <?= view($base_view_folder . 'users/components/sidebar') ?>
+                </aside>
 
             </div>
         </div>

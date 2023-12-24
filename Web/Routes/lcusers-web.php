@@ -38,6 +38,7 @@ $routes->group('user', ['namespace' => '\LcUsers\Web\Controllers', 'filter' => '
     //     $routes->match(['get', 'post'], '/', 'UserSettings::userAccount', ['as' => 'web_user_settings_account']);
     // });
     // 
+    $routes->match(['get','post'], 'profile/password', 'User::userChangePassword', ['as' => 'web_user_profile_password']);
     $routes->match(['get','post'], 'profile', 'User::userProfile', ['as' => 'web_user_profile']);
     $routes->match(['get','post'], 'dashboard', 'User::personalDashboard', ['as' => 'web_dashboard']);
     $routes->match(['get','post'], '/', 'User::personalDashboard', ['as' => 'web_user_area']);

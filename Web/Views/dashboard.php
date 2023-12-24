@@ -1,29 +1,21 @@
 <?= $this->extend($base_view_folder . 'layout/body') ?>
 <?= $this->section('content') ?>
 <article>
-    <div class="row row-user row-user-dashboard">
+    <div class="row row-user row-user">
         <div class="myIn">
-            <div class="row-user-header user-dashboard-header">
-                <?= h2(appLabel('Dashboard', $app->labels, true), 'user-dashboard-title') ?>
+            <header class="user-header">
+                <?= h1(appLabel('Dashboard', $app->labels, true), 'user-title') ?>
                 <?= h4($user_welcome, 'user-welcome-mess') ?>
-            </div>
-            <div class="row-user-module user-dashboard-module">
-                <div class="row-user-cnt user-dashboard-cnt">
+            </header>
+            <div class="user-module">
+                <div class="user-module-main">
 
 
 
                 </div>
-                <div class="row-user-sidebar">
-                    <h5>Area Utente</h5>
-
-                    
-
-                    <ul class="user-dashboard-menu">
-                        <li><a href="<?= route_to('web_user_profile') ?>">Profilo</a></li>
-                        <li><a href="<?= route_to('web_dashboard') ?>">Dashboard</a></li>
-                        <li><a href="<?= route_to('web_logout') ?>">Logout</a></li>
-                    </ul>
-                </div>
+                <aside class="sidebar user_sidebar ">
+                    <?= view($base_view_folder . 'users/components/sidebar') ?>
+                </aside>
             </div>
         </div>
 </article>

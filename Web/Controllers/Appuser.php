@@ -38,7 +38,30 @@ class Appuser extends \App\Controllers\BaseController
       $this->loggedIn = !is_null($userId);
    }
 
-
+   //--------------------------------------------------------------------
+   public function checkPassword(string $password, $user_get_value = null, $user_get_field = 'id')
+   {
+      if($user_get_value){
+         $userAuthData = $this->appuser_auth_model->asObject()
+            ->select('id,user_id,type,id_app,username,token,last_used_at,secret')
+            ->where($user_get_field, $user_get_value)
+            ->where('secret !=', null)
+            ->where('active', 1)
+            ->first();
+            if ($userAuthData) {
+               if (password_verify($password, $userAuthData->secret)) {
+                  $loggedUserData = (object)[
+                     'code' => 200,
+                     'status' => 'found',
+                     'data' => $userAuthData
+                  ];
+                  return $loggedUserData;
+               }
+            }
+      }
+      return false;
+     
+   }
 
    //--------------------------------------------------------------------
    public function login(array $credentials, $remember = null)
@@ -98,33 +121,11 @@ class Appuser extends \App\Controllers\BaseController
    //--------------------------------------------------------------------
    public function loginPostAction($post_data): bool
    {
-      //  // 
-      //  $validate_rules = [
-      //      'email' => ['label' => 'Email', 'rules' => 'required'],
-      //      'password' => ['label' => 'Password', 'rules' => 'required'],
-      //  ];
-      //  // 
-      //  if (defined('LOGIN_VALIDATION_RULES')) {
-      //      $validate_rules = constant('LOGIN_VALIDATION_RULES');
-      //  }
-      //  // 
-      //  if ($this->validate($validate_rules)) {
+
       $logged_user_data =  $this->login($post_data);
       if ($logged_user_data && $logged_user_data->code == 200 && $logged_user_data->data) {
          $this->setUserSession($logged_user_data->data);
-         // session()->setFlashdata('ui_mess', NULL);
-         // session()->setFlashdata('ui_mess_type', NULL);
-
          return TRUE;
-         // return redirect()->route('web_dashboard');
-
-         // if ($get_redirect = $this->request->getGet('returnTo', false)) {
-         //     return redirect()->to(urldecode($get_redirect));
-         // } else {
-         // }
-
-         // 
-
       }
       //  }
       return FALSE;
@@ -148,6 +149,7 @@ class Appuser extends \App\Controllers\BaseController
       }
       return false;
    }
+
    //--------------------------------------------------------------------
    public function activateAccount(object $tokenData)
    {
@@ -193,6 +195,27 @@ class Appuser extends \App\Controllers\BaseController
       return false;
    }
 
+   //--------------------------------------------------------------------
+   public function changeUserPassword($user_id, array $post_data)
+   {
+      if ($user_id) {
+         $generatedToken = random_string('alnum', 8) . '-' . random_string('alnum', 16) . '-' . random_string('alnum', 8);
+         $update_data = [];
+         $update_data['secret'] = $post_data['new_password'];
+         $update_data['token'] = $generatedToken;
+        
+
+         if ( $this->appuser_auth_model->update($user_id, $update_data)) {
+            $new_user_data = (object)[
+               'code' => 200,
+               'status' => 'success',
+               'data' => 'Password aggiornata con successo'
+            ];
+            return $new_user_data;
+         }
+      }
+      return false;
+   }
    //--------------------------------------------------------------------
    public function register(array $post_data, $type = 'email_password')
    {

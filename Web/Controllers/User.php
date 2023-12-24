@@ -220,6 +220,64 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     }
 
     //--------------------------------------------------------------------
+    public function userChangePassword()
+    {
+        $user_data_model = new AppUsersDatasModel();
+        $user_data = $user_data_model->find($this->appuser->getUserId());
+        if (!$user_data) {
+            return redirect()->route('web_login');
+        }
+
+        // 
+        $validate_rules = [
+            'old_password' => ['label' => 'Vecchia password', 'rules' => 'required'],
+            'new_password' => ['label' => 'Password', 'rules' => 'required|min_length[8]'],
+            'confirm_new_password' => ['label' => 'Conferma Password', 'rules' => 'required|matches[new_password]'],
+        ];
+        // 
+        if (defined('PROFILE_CHANGE_PASSWORD_VALIDATION_RULES')) {
+            $validate_rules = constant('PROFILE_CHANGE_PASSWORD_VALIDATION_RULES');
+        }
+        // 
+        if ($this->request->getPost('action') == 'save_new_password') {
+            if ($this->validate($validate_rules)) {
+                if( $old_user_data = $this->appuser->checkPassword($this->request->getPost('old_password'), $this->appuser->getUserAuthId())){
+                    if($old_user_data->data->id != null){
+                        if($this->appuser->changeUserPassword($old_user_data->data->id, $this->request->getPost())){
+                            // $this->appuser->logout();
+                            // return redirect()->route('web_login');
+                            session()->setFlashdata('ui_mess', 'Password modificata con successo');
+                            session()->setFlashdata('ui_mess_type', 'alert alert-success');
+                        }
+                    }
+                }else{
+                    session()->setFlashdata('ui_mess', 'Password errata');
+                    session()->setFlashdata('ui_mess_type', 'alert alert-danger');
+                }
+            }else{
+                session()->setFlashdata('ui_mess', $this->validator->getErrors());
+                session()->setFlashdata('ui_mess_type', 'alert alert-danger');
+            }
+        }
+
+
+
+
+        // 
+        $this->web_ui_date->__set('user_data', $user_data);
+
+        //
+        if (appIsFile($this->base_view_filesystem . 'users/profile-change-password.php')) {
+            $this->web_ui_date->__set('master_view', 'profile-change-password');
+            return view($this->base_view_namespace . 'users/profile-change-password', $this->web_ui_date->toArray());
+        } else {
+            $this->web_ui_date->__set('master_view', 'user-profile-change-password');
+            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+            return view($this->LcUsers_views_namespace . 'profile-change-password', $this->web_ui_date->toArray());
+        }
+    }
+
+    //--------------------------------------------------------------------
     public function userProfile()
     {
 
@@ -249,7 +307,7 @@ class User extends \Lc5\Web\Controllers\MasterWeb
         }
 
 
-        
+
 
         // 
         $this->web_ui_date->__set('user_data', $user_data);
