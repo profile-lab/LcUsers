@@ -13,13 +13,13 @@
     <div class="form-row">
         <div class="form-field">
             <label for="email">Email </label>
-            <input autocomplete="new-email" type="email" name="email" id="email" value="<?= getReq('email') ?>" />
+            <input type="email" name="email" id="email" value="<?= getReq('email') ?>" />
         </div>
     </div>
     <div class="form-row">
         <div class="form-field">
             <label for="password">Password</label>
-            <input autocomplete="new-password" type="password" name="password" id="password" value="<?= getReq('password') ?>" />
+            <input type="password" name="password" id="password" value="<?= getReq('password') ?>" />
         </div>
     </div>
     <div class="form-row">
