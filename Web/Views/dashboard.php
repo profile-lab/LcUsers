@@ -5,10 +5,10 @@
         <div class="myIn">
             <header class="user-header">
                 <?= h1(appLabel('Dashboard', $app->labels, true), 'user-title') ?>
-                <?= h4($user_welcome, 'user-welcome-mess') ?>
             </header>
             <div class="user-module">
                 <div class="user-module-main">
+                <?= h4($user_welcome, 'user-welcome-mess') ?>
 
 
 

@@ -6,8 +6,8 @@
             </svg>
         </a>
     </div>
-    <div class="logout-quickbtn-cnt">
-        <a class="logout-quickbtn" href="<?= route_to(__locale_uri__ . 'web_logout') ?>">Logout</a>
+    <div class="logout-btn-cnt">
+        <a class="logout-btn" href="<?= route_to(__locale_uri__ . 'web_logout') ?>">Logout</a>
     </div>
 <?php } else { ?>
     <div class="user-icon-cnt">
