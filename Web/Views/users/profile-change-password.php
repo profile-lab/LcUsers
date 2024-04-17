@@ -1,4 +1,4 @@
-<?= $this->extend($base_view_folder . 'layout/body') ?>
+<?= $this->extend(customOrDefaultViewFragment('layout/body')) ?>
 <?= $this->section('content') ?>
 <article>
     <div class="row row-user row-user">
@@ -35,28 +35,14 @@
                             </div>
                         </div>
                     </form>
-
-
-
                 </div>
                 <aside class="sidebar user_sidebar ">
-                    <?= view($base_view_folder . 'users/components/sidebar') ?>
+                    <?= view(customOrDefaultViewFragment('users/components/sidebar', 'LcUsers')) ?>
                 </aside>
 
             </div>
         </div>
-
 </article>
-
-
 <?= $this->endSection() ?>
 <?= $this->section('footer_script') ?>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-
-
-    });
-</script>
 <?= $this->endSection() ?>

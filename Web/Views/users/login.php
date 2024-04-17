@@ -1,4 +1,4 @@
-<?= $this->extend($base_view_folder . 'layout/body') ?>
+<?= $this->extend(customOrDefaultViewFragment('layout/body')) ?>
 <?= $this->section('content') ?>
 <article>
     <div class="row row-form row-form-signup">
@@ -8,10 +8,10 @@
             </div>
             <div class="login-signup-module">
                 <div class="login-signup-form-cnt">
-                    <?= view($base_view_folder . 'users/components/login-form') ?>
+                    <?= view(customOrDefaultViewFragment('users/components/login-form', 'LcUsers')) ?>
                 </div>
                 <div class="login-signup-altenative-cnt">
-                    <?= view($base_view_folder . 'users/components/signup-login-alternative') ?>
+                    <?= view(customOrDefaultViewFragment('users/components/signup-login-alternative', 'LcUsers')) ?>
                 </div>
             </div>
         </div>

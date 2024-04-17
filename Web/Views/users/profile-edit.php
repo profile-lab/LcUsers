@@ -1,4 +1,4 @@
-<?= $this->extend($base_view_folder . 'layout/body') ?>
+<?= $this->extend(customOrDefaultViewFragment('layout/body')) ?>
 <?= $this->section('content') ?>
 <article>
     <div class="row row-user row-user">
@@ -62,7 +62,7 @@
 
                 </div>
                 <aside class="sidebar user_sidebar ">
-                    <?= view($base_view_folder . 'users/components/sidebar') ?>
+                    <?= view(customOrDefaultViewFragment('users/components/sidebar', 'LcUsers')) ?>
                 </aside>
 
             </div>

@@ -52,15 +52,24 @@ class User extends \Lc5\Web\Controllers\MasterWeb
                 session()->setFlashdata('ui_mess_type', 'alert alert-danger');
             }
         }
-        //
-        if (appIsFile($this->base_view_filesystem . 'users/login.php')) {
-            $this->web_ui_date->__set('master_view', 'user-login');
-            return view($this->base_view_namespace . 'users/login', $this->web_ui_date->toArray());
+        $pages_model = new PagesModel();
+        $pages_model->setForFrontemd();
+        if ($curr_entity = $pages_model->asObject()->orderBy('id', 'DESC')->where('guid', 'login')->first()) {
+            $pages_entity_rows = $this->getEntityRows($curr_entity->id, 'pages');
+            $this->web_ui_date->entity_rows = $pages_entity_rows;
         } else {
-            $this->web_ui_date->__set('master_view', 'user-login-default');
-            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-            return view($this->LcUsers_views_namespace . 'login', $this->web_ui_date->toArray());
+            $curr_entity = new stdClass();
+            $curr_entity->titolo = 'Login';
+            $curr_entity->guid = 'login';
+            $curr_entity->testo = '';
+            $curr_entity->seo_title = 'Login';
+            $curr_entity->seo_description = '';
         }
+        // 
+        $this->web_ui_date->fill((array)$curr_entity);
+        //
+        $this->web_ui_date->__set('master_view', 'user-login');
+        return view(customOrDefaultViewFragment('users/login', 'LcUsers'), $this->web_ui_date->toArray());
     }
 
     // //--------------------------------------------------------------------
@@ -107,6 +116,35 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     public function signUp()
     {
         $curr_entity = new stdClass();
+        if ($this->signUpAction()) {
+            return redirect()->route('web_login');
+        }
+        // 
+        $pages_model = new PagesModel();
+        $pages_model->setForFrontemd();
+        if ($curr_entity = $pages_model->asObject()->orderBy('id', 'DESC')->where('guid', 'signup')->first()) {
+            $pages_entity_rows = $this->getEntityRows($curr_entity->id, 'pages');
+            $this->web_ui_date->entity_rows = $pages_entity_rows;
+        } else {
+            $curr_entity = new stdClass();
+            $curr_entity->titolo = 'Registrati';
+            $curr_entity->guid = 'signup';
+            $curr_entity->testo = '';
+            $curr_entity->seo_title = 'Signup';
+            $curr_entity->seo_description = '';
+        }
+        // 
+        $this->web_ui_date->fill((array)$curr_entity);
+        //
+
+        //
+        $this->web_ui_date->__set('master_view', 'user-signup');
+        return view(customOrDefaultViewFragment('users/signup', 'LcUsers'), $this->web_ui_date->toArray());
+    }
+
+    //--------------------------------------------------------------------
+    protected function signUpAction()
+    {
         helper('text');
         // 
         $validate_rules = [
@@ -149,7 +187,7 @@ class User extends \Lc5\Web\Controllers\MasterWeb
                             session()->setFlashdata('ui_mess', 'Registrazione avvenuta con successo.');
                             session()->setFlashdata('ui_mess_description', 'Ti abbiamo inviato una mail per poter verificare i tuoi dati e attivare il tuo account.');
                             session()->setFlashdata('ui_mess_type', 'alert alert-success');
-                            return redirect()->route('web_login');
+                            return TRUE;
                         } else {
                             session()->setFlashdata('ui_mess', $this->appLabelMethod("Si è verificato un errore durante l'invio della mail", $this->web_ui_date->app->labels));
                             session()->setFlashdata('ui_mess_type', 'alert alert-danger');
@@ -166,17 +204,6 @@ class User extends \Lc5\Web\Controllers\MasterWeb
                 session()->setFlashdata('ui_mess', $this->validator->getErrors());
                 session()->setFlashdata('ui_mess_type', 'alert alert-danger');
             }
-        }
-        // 
-        $this->web_ui_date->fill((array)$curr_entity);
-        //
-        if (appIsFile($this->base_view_filesystem . 'users/signup.php')) {
-            $this->web_ui_date->__set('master_view', 'user-signup');
-            return view($this->base_view_namespace . 'users/signup', $this->web_ui_date->toArray());
-        } else {
-            $this->web_ui_date->__set('master_view', 'user-signup-default');
-            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-            return view($this->LcUsers_views_namespace . 'signup', $this->web_ui_date->toArray());
         }
     }
 
@@ -207,16 +234,17 @@ class User extends \Lc5\Web\Controllers\MasterWeb
             return redirect()->route('web_login');
         }
         $this->web_ui_date->__set('user_data', $user_data);
-
+        // 
+        $curr_entity = new stdClass();
+        $curr_entity->titolo = 'La tua dashboard personale';
+        $curr_entity->guid = 'dashboard';
+        $curr_entity->testo = '';
+        $curr_entity->seo_title = 'La tua dashboard personale';
+        $curr_entity->seo_description = '';
+        $this->web_ui_date->fill((array)$curr_entity);
         //
-        if (appIsFile($this->base_view_filesystem . 'users/dashboard.php')) {
-            $this->web_ui_date->__set('master_view', 'user-dashboard');
-            return view($this->base_view_namespace . 'users/dashboard', $this->web_ui_date->toArray());
-        } else {
-            $this->web_ui_date->__set('master_view', 'user-dashboard-default');
-            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-            return view($this->LcUsers_views_namespace . 'dashboard', $this->web_ui_date->toArray());
-        }
+        $this->web_ui_date->__set('master_view', 'user-dashboard');
+        return view(customOrDefaultViewFragment('users/dashboard', 'LcUsers'), $this->web_ui_date->toArray());
     }
 
     //--------------------------------------------------------------------
@@ -241,52 +269,57 @@ class User extends \Lc5\Web\Controllers\MasterWeb
         // 
         if ($this->request->getPost('action') == 'save_new_password') {
             if ($this->validate($validate_rules)) {
-                if( $old_user_data = $this->appuser->checkPassword($this->request->getPost('old_password'), $this->appuser->getUserAuthId())){
-                    if($old_user_data->data->id != null){
-                        if($this->appuser->changeUserPassword($old_user_data->data->id, $this->request->getPost())){
+                if ($old_user_data = $this->appuser->checkPassword($this->request->getPost('old_password'), $this->appuser->getUserAuthId())) {
+                    if ($old_user_data->data->id != null) {
+                        if ($this->appuser->changeUserPassword($old_user_data->data->id, $this->request->getPost())) {
                             // $this->appuser->logout();
                             // return redirect()->route('web_login');
                             session()->setFlashdata('ui_mess', 'Password modificata con successo');
                             session()->setFlashdata('ui_mess_type', 'alert alert-success');
                         }
                     }
-                }else{
+                } else {
                     session()->setFlashdata('ui_mess', 'Password errata');
                     session()->setFlashdata('ui_mess_type', 'alert alert-danger');
                 }
-            }else{
+            } else {
                 session()->setFlashdata('ui_mess', $this->validator->getErrors());
                 session()->setFlashdata('ui_mess_type', 'alert alert-danger');
             }
         }
-
-
-
-
         // 
         $this->web_ui_date->__set('user_data', $user_data);
-
+        // 
+        $curr_entity = new stdClass();
+        $curr_entity->titolo = 'Crea la tua nuova password';
+        $curr_entity->guid = 'password';
+        $curr_entity->testo = '';
+        $curr_entity->seo_title = 'Crea la tua nuova password';
+        $curr_entity->seo_description = '';
+        $this->web_ui_date->fill((array)$curr_entity);
+        $this->web_ui_date->__set('user_data', $user_data);
         //
-        if (appIsFile($this->base_view_filesystem . 'users/profile-change-password.php')) {
-            $this->web_ui_date->__set('master_view', 'profile-change-password');
-            return view($this->base_view_namespace . 'users/profile-change-password', $this->web_ui_date->toArray());
-        } else {
-            $this->web_ui_date->__set('master_view', 'user-profile-change-password');
-            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-            return view($this->LcUsers_views_namespace . 'profile-change-password', $this->web_ui_date->toArray());
-        }
+        $this->web_ui_date->__set('master_view', 'user-profile-change-password');
+        return view(customOrDefaultViewFragment('users/profile-change-password', 'LcUsers'), $this->web_ui_date->toArray());
+        // //
+        // if (appIsFile($this->base_view_filesystem . 'users/profile-change-password.php')) {
+        //     $this->web_ui_date->__set('master_view', 'profile-change-password');
+        //     return view($this->base_view_namespace . 'users/profile-change-password', $this->web_ui_date->toArray());
+        // } else {
+        //     $this->web_ui_date->__set('master_view', 'user-profile-change-password');
+        //     $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
+        //     return view($this->LcUsers_views_namespace . 'profile-change-password', $this->web_ui_date->toArray());
+        // }
     }
 
     //--------------------------------------------------------------------
     public function userProfile()
     {
-
         $user_data_model = new AppUsersDatasModel();
         $user_data = $user_data_model->find($this->appuser->getUserId());
         if (!$user_data) {
             return redirect()->route('web_login');
         }
-
         // 
         $validate_rules = [
             'name' => ['label' => 'Nome', 'rules' => 'required'],
@@ -305,36 +338,18 @@ class User extends \Lc5\Web\Controllers\MasterWeb
                 session()->setFlashdata('ui_mess_type', 'alert alert-danger');
             }
         }
-
-
-
-
         // 
+        $curr_entity = new stdClass();
+        $curr_entity->titolo = 'I tuoi dati personali';
+        $curr_entity->guid = 'profile';
+        $curr_entity->testo = '';
+        $curr_entity->seo_title = 'I tuoi dati personali';
+        $curr_entity->seo_description = '';
+        $this->web_ui_date->fill((array)$curr_entity);
         $this->web_ui_date->__set('user_data', $user_data);
-
         //
-        if (appIsFile($this->base_view_filesystem . 'users/profile-edit.php')) {
-            $this->web_ui_date->__set('master_view', 'user-profile-edit');
-            return view($this->base_view_namespace . 'users/profile-edit', $this->web_ui_date->toArray());
-        } else {
-            $this->web_ui_date->__set('master_view', 'user-profile-edit-default');
-            $this->web_ui_date->__set('base_view_folder', $this->base_view_namespace);
-            return view($this->LcUsers_views_namespace . 'profile-edit', $this->web_ui_date->toArray());
-        }
+        $this->web_ui_date->__set('master_view', 'user-profile-edit');
+        return view(customOrDefaultViewFragment('users/profile-edit', 'LcUsers'), $this->web_ui_date->toArray());
     }
 
-
-    //--------------------------------------------------------------------
-    public function index()
-    {
-
-
-
-        // if ($this->cart->checkCartAction()) {
-        //     return redirect()->to(site_url(uri_string()));
-        // }
-
-
-        // return view($this->base_view_namespace . 'shop/archive', $this->web_ui_date->toArray());
-    }
 }
