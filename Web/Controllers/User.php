@@ -313,6 +313,69 @@ class User extends \Lc5\Web\Controllers\MasterWeb
     }
 
     //--------------------------------------------------------------------
+    public function shopOrders()
+    {
+        $user_data_model = new AppUsersDatasModel();
+        $user_data = $user_data_model->find($this->appuser->getUserId());
+        if (!$user_data) {
+            return redirect()->route('web_login');
+        }
+        // 
+        $curr_entity = new stdClass();
+        $curr_entity->titolo = 'I tuoi Ordini';
+        $curr_entity->guid = 'orders';
+        $curr_entity->testo = '';
+        $curr_entity->seo_title = 'I tuoi Ordini';
+        $curr_entity->seo_description = '';
+
+        $refShopActionContoller = 'LcShop\Web\Controllers\ShopAction';
+        if (class_exists($refShopActionContoller)) {
+            $shop_action = new $refShopActionContoller();
+            $user_orders_list = $shop_action->getUserOrders($this->appuser->getUserId());
+            $curr_entity->user_orders_list = $user_orders_list;
+        }
+
+
+
+        $this->web_ui_date->fill((array)$curr_entity);
+        $this->web_ui_date->__set('user_data', $user_data);
+        //
+        $this->web_ui_date->__set('master_view', 'user-orders');
+        return view(customOrDefaultViewFragment('users/orders', 'LcUsers'), $this->web_ui_date->toArray());
+    }
+    //--------------------------------------------------------------------
+    public function shopOrderDett($id_oder)
+    {
+        $user_data_model = new AppUsersDatasModel();
+        $user_data = $user_data_model->find($this->appuser->getUserId());
+        if (!$user_data) {
+            return redirect()->route('web_login');
+        }
+        // 
+        $curr_entity = new stdClass();
+        $curr_entity->titolo = 'Il tuo Ordine';
+        $curr_entity->guid = 'order-dett';
+        $curr_entity->testo = '';
+        $curr_entity->seo_title = 'Il tuo Ordine';
+        $curr_entity->seo_description = '';
+
+        $refShopActionContoller = 'LcShop\Web\Controllers\ShopAction';
+        if (class_exists($refShopActionContoller)) {
+            $shop_action = new $refShopActionContoller();
+            $order_data = $shop_action->getUserOrderDett($this->appuser->getUserId(), $id_oder);
+            $curr_entity->order_data = $order_data;
+        }
+
+
+
+        $this->web_ui_date->fill((array)$curr_entity);
+        $this->web_ui_date->__set('user_data', $user_data);
+        //
+        $this->web_ui_date->__set('master_view', 'user-orders');
+        return view(customOrDefaultViewFragment('users/orders-dett', 'LcUsers'), $this->web_ui_date->toArray());
+    }
+
+    //--------------------------------------------------------------------
     public function userProfile()
     {
         $user_data_model = new AppUsersDatasModel();
@@ -351,5 +414,4 @@ class User extends \Lc5\Web\Controllers\MasterWeb
         $this->web_ui_date->__set('master_view', 'user-profile-edit');
         return view(customOrDefaultViewFragment('users/profile-edit', 'LcUsers'), $this->web_ui_date->toArray());
     }
-
 }
