@@ -53,9 +53,7 @@
 
 
                 </div>
-                <aside class="sidebar user_sidebar ">
-                    <?= view(customOrDefaultViewFragment('users/components/sidebar', 'LcUsers')) ?>
-                </aside>
+                <?= view(customOrDefaultViewFragment('users/components/sidebar', 'LcUsers')) ?>
 
             </div>
         </div>

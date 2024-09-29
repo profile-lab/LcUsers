@@ -1,20 +1,21 @@
 <?= $this->extend(customOrDefaultViewFragment('layout/body')) ?>
 <?= $this->section('content') ?>
 <article>
-    <div class="row row-form row-form-signup">
+    <section class="lcshop-header">
         <div class="myIn">
-            <div class="login-signup-header">
-                <?= h2(appLabel('Login', $app->labels, true), 'login-signup-title') ?>
-            </div>
-            <div class="login-signup-module">
-                <div class="login-signup-form-cnt">
-                    <?= view(customOrDefaultViewFragment('users/components/login-form', 'LcUsers')) ?>
-                </div>
-                <div class="login-signup-altenative-cnt">
-                    <?= view(customOrDefaultViewFragment('users/components/signup-login-alternative', 'LcUsers')) ?>
-                </div>
+            <hgroup>
+                <?= h1($titolo) ?>
+            </hgroup>
+        </div>
+    </section>
+    <div class="row lcusers-content lcusers-content-login">
+        <div class="myIn lcusers-flex">
+            <div class="lcusers-login-form-cnt">
+                <?= view(customOrDefaultViewFragment('users/components/login-form', 'LcUsers')) ?>
+                <?= view(customOrDefaultViewFragment('users/components/signup-login-alternative', 'LcUsers')) ?>
             </div>
         </div>
+    </div>
 
 </article>
 

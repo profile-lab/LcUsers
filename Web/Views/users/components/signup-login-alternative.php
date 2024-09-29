@@ -1,2 +1,4 @@
-<?= h4(appLabel('Non sei ancora registrato?', $app->labels, true), 'login-signup-alternative-title') ?>
-                    <?= cta((route_to('web_signup') . (($request->getGet('returnTo')) ? '?returnTo=' . urlencode($request->getGet('returnTo')) : '')), appLabel('Registrati adesso', $app->labels, true), 'login-signup-alternative-link') ?>
+<div class="lcuser-altenative">
+    <?= h6(langLabel('Non sei ancora registrato?'), 'lcuser-altenative-title') ?>
+    <?= cta((route_to('web_signup') . (($request->getGet('returnTo')) ? '?returnTo=' . urlencode($request->getGet('returnTo')) : '')), langLabel('Registrati adesso'), 'lcuser-altenative') ?>
+</div>

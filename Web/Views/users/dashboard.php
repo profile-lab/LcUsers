@@ -1,20 +1,24 @@
 <?= $this->extend(customOrDefaultViewFragment('layout/body')) ?>
 <?= $this->section('content') ?>
 <article>
-    <div class="row row-user row-user">
+    <section class="lcshop-header">
         <div class="myIn">
-            <header class="user-header">
-                <?= h1($titolo, 'user-title') ?>
-            </header>
-            <div class="user-module">
+            <hgroup>
+                <?= h1($titolo) ?>
+            </hgroup>
+        </div>
+    </section>
+    <div class="row lcusers-content lcusers-content-dashboard">
+        <div class="myIn lcusers-flex">
+            <div class="lcusers-profile-form-cnt">
+
                 <div class="user-module-main">
                     <?= h4($user_welcome, 'user-welcome-mess') ?>
                 </div>
-                <aside class="sidebar user_sidebar ">
-                    <?= view(customOrDefaultViewFragment('users/components/sidebar', 'LcUsers')) ?>
-                </aside>
             </div>
+            <?= view(customOrDefaultViewFragment('users/components/sidebar', 'LcUsers')) ?>
         </div>
+    </div>
 </article>
 
 

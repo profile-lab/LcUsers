@@ -26,7 +26,7 @@
                                 <div class="order_dett_label">Stato Pagamento</div>
                                 <div class="order_dett_value"><?= $order_data->payment_type_label ?>/<?= $order_data->payment_status_label ?></div>
                             </div>
-                            
+
                         </div>
                         <div class="order_dett_spedizioni">
                             <div class="order_dett_row order_dett_row_full">
@@ -47,7 +47,7 @@
                                     <p>
                                         <?= $order_data->ship_infos ?>
                                     </p>
-                                
+
                                 </div>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                                     <p>
                                         <?= $order_data->pay_infos ?>
                                     </p>
-                                
+
                                 </div>
                             </div>
                         </div>
@@ -133,9 +133,7 @@
 
 
                 </div>
-                <aside class="sidebar user_sidebar ">
-                    <?= view(customOrDefaultViewFragment('users/components/sidebar', 'LcUsers')) ?>
-                </aside>
+                <?= view(customOrDefaultViewFragment('users/components/sidebar', 'LcUsers')) ?>
 
             </div>
         </div>
@@ -171,7 +169,8 @@
         margin: 0 1rem 1rem 0;
         border-bottom: #F5f5f5 1px solid;
     }
-    .order_dett_row_full{
+
+    .order_dett_row_full {
         display: block;
     }
 
