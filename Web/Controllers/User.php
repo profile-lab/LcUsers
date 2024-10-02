@@ -127,9 +127,10 @@ class User extends \Lc5\Web\Controllers\MasterWeb
                     session()->setFlashdata('ui_mess', 'Indirizzo email già presente');
                     session()->setFlashdata('ui_mess_type', 'alert alert-danger');
                 } else {
-                    $new_user_data =  $this->appuser->register($this->request->getPost());
-                    if ($new_user_data) {
-                        $body_params = $new_user_data->data;
+                    $new_user_resp_data =  $this->appuser->register($this->request->getPost());
+                    if ($new_user_resp_data) {
+                        // $new_user_data = $new_user_resp_data->data;
+                        $body_params = $new_user_resp_data->data;
                         //
                         if (appIsFile($this->base_view_filesystem . 'email/attiva_account.html')) {
                             $htmlbody = file_get_contents(APPPATH . 'email/attiva_account.html');
