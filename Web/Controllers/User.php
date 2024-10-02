@@ -72,46 +72,6 @@ class User extends \Lc5\Web\Controllers\MasterWeb
         return view(customOrDefaultViewFragment('users/login', 'LcUsers'), $this->web_ui_date->toArray());
     }
 
-    // //--------------------------------------------------------------------
-    // protected function loginPostAction():bool
-    // {
-    //     // 
-    //     $validate_rules = [
-    //         'email' => ['label' => 'Email', 'rules' => 'required'],
-    //         'password' => ['label' => 'Password', 'rules' => 'required'],
-    //     ];
-    //     // 
-    //     if (defined('LOGIN_VALIDATION_RULES')) {
-    //         $validate_rules = constant('LOGIN_VALIDATION_RULES');
-    //     }
-    //     // 
-    //     if ($this->validate($validate_rules)) {
-    //         $logged_user_data =  $this->appuser->login($this->request->getPost());
-    //         if ($logged_user_data && $logged_user_data->code == 200 && $logged_user_data->data) {
-    //             $this->appuser->setUserSession($logged_user_data->data);
-    //             session()->setFlashdata('ui_mess', NULL);
-    //             session()->setFlashdata('ui_mess_type', NULL);
-
-    //             return TRUE;
-    //             // return redirect()->route('web_dashboard');
-
-    //             // if ($get_redirect = $this->request->getGet('returnTo', false)) {
-    //             //     return redirect()->to(urldecode($get_redirect));
-    //             // } else {
-    //             // }
-
-    //             // 
-    //         } else {
-    //             session()->setFlashdata('ui_mess', 'Nome utente o password errati');
-    //             session()->setFlashdata('ui_mess_type', 'alert alert-danger');
-    //         }
-    //     } else {
-    //         session()->setFlashdata('ui_mess', 'Nome utente o password errati');
-    //         session()->setFlashdata('ui_mess_type', 'alert alert-danger');
-    //     }
-    //     return FALSE;
-    // }
-
     //--------------------------------------------------------------------
     public function signUp()
     {
@@ -241,8 +201,16 @@ class User extends \Lc5\Web\Controllers\MasterWeb
         $curr_entity->testo = '';
         $curr_entity->seo_title = 'La tua dashboard personale';
         $curr_entity->seo_description = '';
-        $this->web_ui_date->fill((array)$curr_entity);
+
+        $refShopActionContoller = 'LcShop\Web\Controllers\ShopAction';
+        if (class_exists($refShopActionContoller)) {
+            $shop_action = new $refShopActionContoller();
+            $latest_user_orders = $shop_action->getUserOrders($this->appuser->getUserId());
+            $curr_entity->latest_user_orders = $latest_user_orders;
+        }
         //
+        $this->web_ui_date->fill((array)$curr_entity);
+        // 
         $this->web_ui_date->__set('master_view', 'user-dashboard');
         return view(customOrDefaultViewFragment('users/dashboard', 'LcUsers'), $this->web_ui_date->toArray());
     }

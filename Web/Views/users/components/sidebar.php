@@ -12,10 +12,12 @@
         </div>
         <div class="lcuser-sidebar-menu-cnt-data">
             <h6>Area Utente</h6>
-            <div class="lcuser-sidebar-menu-cnt">
+            <div class="lcuser-sidebar-menu-nav">
                 <ul class="lcuser-sidebar-menu">
                     <li><a href="<?= route_to('web_dashboard') ?>">Dashboard</a></li>
                     <li><a href="<?= route_to('web_user_profile') ?>">Profilo</a></li>
+
+                    <li><a href="<?= route_to('web_user_orders') ?>">Ordini</a></li>
                     <li><a href="<?= route_to('web_logout') ?>">Logout</a></li>
                 </ul>
             </div>
