@@ -9,8 +9,11 @@
         </div>
     </section>
     <div class="row lcusers-content lcusers-content-signup">
+        
         <div class="myIn lcusers-flex">
             <div class="lcusers-signup-form-cnt">
+            <?= h4(langLabel('Non sei ancora registrato?'), 'lcuser-altenative-title') ?>
+            <?= h5(langLabel('Procedi come nuovo utente'), 'lcuser-altenative-title') ?>
                 <form method="post" class="lcusers-signup-form" action="#signupform" id="signupform">
                     <?= getServerMessage() ?>
                     <?php /*

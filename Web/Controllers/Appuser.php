@@ -41,26 +41,25 @@ class Appuser extends \App\Controllers\BaseController
    //--------------------------------------------------------------------
    public function checkPassword(string $password, $user_get_value = null, $user_get_field = 'id')
    {
-      if($user_get_value){
+      if ($user_get_value) {
          $userAuthData = $this->appuser_auth_model->asObject()
             ->select('id,user_id,type,id_app,username,token,last_used_at,secret')
             ->where($user_get_field, $user_get_value)
             ->where('secret !=', null)
             ->where('active', 1)
             ->first();
-            if ($userAuthData) {
-               if (password_verify($password, $userAuthData->secret)) {
-                  $loggedUserData = (object)[
-                     'code' => 200,
-                     'status' => 'found',
-                     'data' => $userAuthData
-                  ];
-                  return $loggedUserData;
-               }
+         if ($userAuthData) {
+            if (password_verify($password, $userAuthData->secret)) {
+               $loggedUserData = (object)[
+                  'code' => 200,
+                  'status' => 'found',
+                  'data' => $userAuthData
+               ];
+               return $loggedUserData;
             }
+         }
       }
       return false;
-     
    }
 
    //--------------------------------------------------------------------
@@ -183,13 +182,15 @@ class Appuser extends \App\Controllers\BaseController
       if ($user_id) {
          $userData = $this->appuser_data_model->find($user_id);
          $userData->fill($post_data);
-         if ($this->appuser_data_model->save($userData)) {
-            $new_user_data = (object)[
-               'code' => 200,
-               'status' => 'success',
-               'data' => $userData
-            ];
-            return $new_user_data;
+         if ($userData->hasChanged()) {
+            if ($this->appuser_data_model->save($userData)) {
+               $new_user_data = (object)[
+                  'code' => 200,
+                  'status' => 'success',
+                  'data' => $userData
+               ];
+               return $new_user_data;
+            }
          }
       }
       return false;
@@ -203,9 +204,9 @@ class Appuser extends \App\Controllers\BaseController
          $update_data = [];
          $update_data['secret'] = $post_data['new_password'];
          $update_data['token'] = $generatedToken;
-        
 
-         if ( $this->appuser_auth_model->update($user_id, $update_data)) {
+
+         if ($this->appuser_auth_model->update($user_id, $update_data)) {
             $new_user_data = (object)[
                'code' => 200,
                'status' => 'success',
