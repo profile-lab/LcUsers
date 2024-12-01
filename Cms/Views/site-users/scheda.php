@@ -11,44 +11,57 @@
             <?= view('Lc5\Cms\Views\layout/components/back-btn') ?>
             <div class="titoli_scheda">
                 <?php if ($entity->id) { ?>
-                    <h3><?= $entity->name  ?> <?= $entity->surname ?></h3>
+                    <h3>Scheda utente</h3>
                 <?php } else { ?>
-                    <h3>Crea nuovo prodotto</h3>
+                    <h3>Crea nuovo utente</h3>
                 <?php } ?>
-               
+
             </div>
         </div>
         <div class="d-flex align-items-center ">
             <div>
-                <button type="submit" name="save" value="save" class="btn bottone_salva btn-primary"><span class="oi oi-check"></span>Salva</button>
+                <button type="submit" class="btn bottone_salva btn-primary"><span class="oi oi-check"></span>Salva</button>
             </div>
         </div>
     </div>
 
     <div class="row form-row">
         <div class="col-12 col-lg-9 scheda_body">
-            <div class="first-row">
-                <div class="row">
+
+            <div class="row">
+                <div class="row form-row">
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nome', 'name' => 'name', 'value' => $entity->name]]) ?>
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Cognome', 'name' => 'surname', 'value' => $entity->surname]]) ?>
+                </div>
+                <div class="row form-row">
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Telefono', 'name' => 'tel_num', 'value' => $entity->tel_num]]) ?>
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Email', 'name' => 'email', 'value' => $entity->email]]) ?>
+                </div>
+                <div class="row form-row">
+                    <h6><b>
+                        Indirizzo
+                </b></h6>
+                </div>
+                <div class="row form-row">
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Nazione', 'name' => 'country', 'value' => $entity->country]]) ?>
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Provincia', 'name' => 'district', 'value' => $entity->district]]) ?>
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Città', 'name' => 'city', 'value' => $entity->city]]) ?>
+                </div>
+                <div class="row form-row">
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Cap', 'name' => 'cap', 'value' => $entity->cap]]) ?>
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Indirizzo', 'name' => 'address', 'value' => $entity->address]]) ?>
+                </div>
                     
-                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Modello', 'name' => 'modello', 'value' => $entity->modello, 'placeholder' => 'Nome modello']]) ?>
+                <div class="row form-row">
+                    <h6><b>
+                        Informazioni aggiuntive - dati di fatturazione
+                </b></h6>
                 </div>
-                <div class="row form-row row-colore">
-                    <?= view('Lc5\Cms\Views\form-cmp/select-search', ['item' => ['label' => 'Tipo', 'input_class' => 'select-tags-colore', 'name' => 'colore', 'value' => (isset($entity->colore)) ? $entity->colore : null,  'sources' => $entity->variations_list]]) ?>
-                    <?= view('Lc5\Cms\Views\form-cmp/select-search', ['item' => ['label' => 'Misura', 'input_class' => 'select-tags-misura', 'name' => 'misura', 'value' => (isset($entity->misura)) ? $entity->misura : null,  'sources' => $entity->sizes_list]]) ?>
+                <div class="row form-row">
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Partita Iva', 'name' => 'piva', 'value' => $entity->piva]]) ?>
+                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Codice Fiscale', 'name' => 'cf', 'value' => $entity->cf]]) ?>
                 </div>
-                <div class="row">
-                    <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Stile', 'name' => 'stile', 'value' => $entity->stile, 'placeholder' => '']]) ?>
-                </div>
-                <div class="row">
-                    <?= view('Lc5\Cms\Views\form-cmp/html-editor', ['item' => ['label' => 'Descrizione', 'name' => 'testo', 'value' => (isset($entity->testo)) ? $entity->testo : '', 'placeholder' => '...']]) ?>
-                </div>
-                <div class="row">
-                    <?= view('Lc5\Cms\Views\form-cmp/html-editor', ['item' => ['label' => 'Scheda tecnica', 'name' => 'scheda_tecnica', 'value' => (isset($entity->scheda_tecnica)) ? $entity->scheda_tecnica : '', 'placeholder' => '...']]) ?>
-                </div>
-                <div class="row">
-                    <?= view('Lc5\Cms\Views\form-cmp/img-gallery', ['item' => ['label' => 'Gallery', 'name' => 'gallery', 'value' => (isset($entity->gallery)) ? $entity->gallery : '{}',  'gallery_obj' => (isset($entity->gallery_obj)) ? $entity->gallery_obj : []]]) ?>
-                </div>
-                
+
             </div>
 
         </div>
@@ -56,34 +69,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="bg-light rounded">
-                        <?php if (!isset($entity->parent_entity)) { ?>
-                            <div class="row">
-                                <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Nome', 'value' => $entity->nome, 'name' => 'nome',  'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'nome',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
-                                <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->guid, 'width' => 'col-12', 'placeholder' => '', 'if_active_name' => 'guid',  'enabled' => (($entity->id) ? TRUE : FALSE)]]) ?>
-                                <?php /*
-                                <?= view('Lc5\Cms\Views\form-cmp/readonly', ['item' => ['label' => 'Guid', 'value' => $entity->guid,  'placeholder' => '']]) ?>
-                                */ ?>
 
-                            </div>
-                        <?php } ?>
                         <div class="row">
-                            <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Public', 'name' => 'public', 'input_class' => 'public', 'value' => $entity->public, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true]]); ?>
-                            <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'Barcode', 'name' => 'barcode', 'value' => $entity->barcode, 'placeholder' => '']]) ?>
-                            <?= view('Lc5\Cms\Views\form-cmp/text', ['item' => ['label' => 'SKU', 'name' => 'sku', 'value' => $entity->sku, 'placeholder' => '']]) ?>
-                           
+                            <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Attivo', 'name' => 'status', 'input_class' => 'status', 'value' => $entity->status, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true]]); ?>
+                            <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Termini e condizioni', 'name' => 't_e_c', 'input_class' => 't_e_c', 'value' => $entity->t_e_c, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true]]); ?>
+                            <?= view('Lc5\Cms\Views\form-cmp/select', ['item' => ['label' => 'Privacy', 'name' => 'privacy', 'input_class' => 'privacy', 'value' => $entity->privacy, 'width' => 'col-md-12', 'sources' => $bool_values, 'no_empty' => true]]); ?>
+
                         </div>
-                        <div class="row">
-                            <?= view('Lc5\Cms\Views\form-cmp/img-single', ['item' => ['label' => 'Copertina', 'name' => 'main_img_id', 'value' => $entity->main_img_id, 'src' => $entity->main_img_thumb]]) ?>
-                        </div>
-                        <?php if (trim(env("custom.shop_products.has_alt_image")) && env("custom.shop_products.has_alt_image") == true) { ?>
-                            <div class="row">
-                                <?= view('Lc5\Cms\Views\form-cmp/img-single', ['item' => ['label' => 'Alternativa', 'name' => 'alt_img_id', 'value' => $entity->alt_img_id, 'src' => $entity->alt_img_thumb]]) ?>
-                            </div>
-                        <?php } ?>
-                        <div class="row">
-                            <hr />
-                        </div>
-                       
 
 
 

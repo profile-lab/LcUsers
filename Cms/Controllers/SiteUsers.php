@@ -61,16 +61,18 @@ class SiteUsers extends MasterLc
 
 
 			$validate_rules = [
-				'nome' => ['label' => 'Nome', 'rules' => 'required'],
+				'name' => ['label' => 'Nome', 'rules' => 'required'],
+				'surname' => ['label' => 'Nome', 'rules' => 'required'],
 			];
 			$is_falied = TRUE;
 			$curr_entity->fill($this->req->getPost());
 			if ($this->validate($validate_rules)) {
-				
 
-				$this->appuser_data_model->save($curr_entity);
-
-
+				if ($curr_entity->hasChanged()) {
+					if ($this->appuser_data_model->myModelHasChanged($curr_entity)) {
+						$this->appuser_data_model->save($curr_entity);
+					}
+				}
 
 				// 
 				return redirect()->route($this->route_prefix . '_edit', [$curr_entity->id]);
