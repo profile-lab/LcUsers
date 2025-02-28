@@ -10,7 +10,7 @@
     </section>
     <div class="row lcusers-content lcusers-content-login">
         <div class="myIn lcusers-flex">
-            <div class="lcusers-login-form-cnt">
+            <div class="lcusers-login-or-signup-cnt">
                 <?= view(customOrDefaultViewFragment('users/components/login-form', 'LcUsers')) ?>
                 <?= view(customOrDefaultViewFragment('users/components/signup-login-alternative', 'LcUsers')) ?>
             </div>
